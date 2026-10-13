@@ -1,0 +1,92 @@
+/* The hero film in a window on a desktop wallpaper. Sizes are cluely.com's frame measured at 1440px (see Desktop.tsx). */
+.dk {
+  /* the wallpaper muted so the film stays the most colourful thing in the frame */
+  --dk-tone: saturate(0.68) contrast(0.7) brightness(0.98) sepia(0.12);
+  position: relative;
+  width: min(1152px, calc(100vw - 96px));
+  aspect-ratio: 1.7;
+  margin-top: 64px;
+  border-radius: 13px;
+}
+
+/* a blurred copy of the wallpaper behind the screen: the soft halo where it meets the sky */
+.dk-glow {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 13px;
+  object-fit: cover;
+  filter: blur(24px) var(--dk-tone);
+  opacity: 0.8;
+  pointer-events: none;
+}
+
+.dk-screen {
+  position: relative;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 13px;
+  isolation: isolate;
+  display: grid;
+  place-items: center;
+  background: #8fa6d8;
+}
+.dk-wall {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: var(--dk-tone);
+}
+
+.dk-window {
+  position: relative;
+  width: 74%;
+  overflow: hidden;
+  border-radius: 11px;
+  background: #1b1c20;
+  box-shadow:
+    0 0 0 0.5px rgba(0, 0, 0, 0.5),
+    0 22px 56px -10px rgba(18, 20, 60, 0.42),
+    0 6px 18px rgba(10, 12, 30, 0.2);
+}
+.dk-window::after {                 /* a hairline highlight round the window, over the video */
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  pointer-events: none;
+}
+.dk-titlebar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 28px;
+  padding: 0 12px;
+  background: linear-gradient(180deg, #2c2d33, #232429);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.55);
+}
+.dk-light { width: 12px; height: 12px; flex: none; border-radius: 50%; box-shadow: inset 0 0 0 0.5px rgba(0, 0, 0, 0.22); }
+.dk-close { background: #ff5f57; }
+.dk-min { background: #febc2e; }
+.dk-max { background: #28c840; }
+.dk-window video {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  background: #cfe3f3;
+}
+
+/* phones: a taller screen so the window keeps a margin of wallpaper round it */
+@media (max-width: 760px) {
+  .dk { width: calc(100vw - 24px); aspect-ratio: 1.3; margin-top: 44px; border-radius: 11px; }
+  .dk-glow, .dk-screen { border-radius: 11px; }
+  .dk-glow { filter: blur(16px) var(--dk-tone); }
+  .dk-window { width: 90%; border-radius: 8px; }
+  .dk-titlebar { height: 20px; gap: 5px; padding: 0 8px; }
+  .dk-light { width: 8px; height: 8px; }
+}

@@ -1,0 +1,160 @@
+/* God's Plan landing, after cluely.com: a painted sky over Toronto, a serif headline in white, one blue button, the
+   film floating over the sky's lower edge, then white. Measurements are Cluely's (see the project vault). */
+:root {
+  --gp-blue: #1c38ea;                /* Cluely's button blue, deep end */
+  --gp-blue-2: #1e82e0;              /* its light end */
+  --gp-ink: #0b0d12;                 /* body text on white */
+  --gp-grey: #8c929d;                /* the grey second half of a heading */
+  --gp-serif: 'EB Garamond Variable', 'EB Garamond', Georgia, serif;
+}
+
+.lp {
+  position: relative;
+  min-height: 100vh;
+  overflow-x: clip;
+  background: #fff;
+  color: var(--gp-ink);
+}
+.lp a { color: inherit; text-decoration: none; }
+
+/* the sky: the painted Toronto backdrop, fading to white below the horizon like Cluely's */
+.lp-sky {
+  position: absolute;
+  inset: 0 0 auto;
+  height: 1100px;
+  /* the image grows with the width on wide screens, so lift it to keep the tower tops ~375px down (under the subline) */
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0) 560px, rgba(255, 255, 255, 0.78) 720px, #fff 860px), /* the lake fades to mist beside the desktop */
+    image-set(url('/media/hero-sky-1x.jpg') 1x, url('/media/hero-sky.jpg') 2x) center min(0px, 375px - 25.96vw) / cover no-repeat;
+  pointer-events: none;
+}
+
+/* nav: 54px, transparent, white */
+.lp-nav {
+  position: relative;
+  z-index: 2;
+  height: 64px;
+  max-width: 1152px;
+  margin: 0 auto;
+  padding: 10px 0;
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  color: #fff;
+}
+.lp-brand { display: flex; align-items: center; gap: 9px; }
+.lp-brand-mark { filter: brightness(0) invert(1); }
+.lp-nav-links { display: flex; gap: 28px; font-size: 15px; font-weight: 500; }
+.lp-nav-links a { opacity: 0.95; transition: opacity 0.15s; }
+.lp-nav-links a:hover { opacity: 0.75; }
+
+/* the one button: Cluely's glossy blue */
+.lp-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border: 0;
+  border-radius: 12px;
+  background:
+    radial-gradient(101.79% 101.79% at 65.61% 81.79%, rgba(255, 255, 255, 0.6) 0, rgba(255, 255, 255, 0) 100%),
+    radial-gradient(114.65% 114.65% at 9.73% 17.27%, var(--gp-blue-2) 0, var(--gp-blue) 100%);
+  background-blend-mode: overlay, normal;
+  box-shadow: 20px 20px 24px rgba(148, 172, 243, 0.4), inset -3px -3px 4px rgba(191, 229, 251, 0.4), inset 4px 4px 4px rgba(19, 26, 228, 0.1);
+  color: #fff;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 24px;
+  cursor: pointer;
+  transition: transform 0.16s ease-out;
+}
+.lp-btn::before {
+  content: "";
+  position: absolute;
+  top: -1px;
+  left: -1px;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  padding: 3px;
+  border-radius: 10px;
+  background: linear-gradient(176.87deg, rgba(255, 255, 255, 0.5) 8.56%, rgba(255, 255, 255, 0) 85.04%);
+  mask: linear-gradient(#fff 0 0) content-box exclude, linear-gradient(#fff 0 0);
+  opacity: 0.45;
+  filter: blur(1px);
+  pointer-events: none;
+}
+.lp-btn::after {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  border-radius: inherit;
+  background: radial-gradient(101.79% 101.79% at 65.61% 81.79%, rgba(255, 255, 255, 0.6) 0);
+  mix-blend-mode: overlay;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+  pointer-events: none;
+}
+.lp-btn svg { width: 17px; height: 17px; }
+.lp-btn:hover { transform: scale(1.03); }
+.lp-btn:hover::after { opacity: 0.4; }
+.lp-btn:active { transform: scale(0.97); }
+
+/* hero */
+.lp-hero {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 64px 24px 112px;
+  text-align: center;
+  color: #fff;
+}
+.lp-hero h1 {
+  margin: 0;
+  font-family: var(--gp-serif);
+  font-size: 80px;
+  font-weight: 500;
+  line-height: 0.96;
+  letter-spacing: -1px;
+  text-wrap: balance;
+  text-shadow: 0 2px 30px rgba(30, 80, 160, 0.18);
+}
+.lp-eyebrow {
+  margin-bottom: 20px;
+  padding: 5px 14px;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.14);
+  backdrop-filter: blur(8px);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  letter-spacing: 0.02em;
+}
+.lp-hero hr {
+  width: 384px;
+  max-width: 70%;
+  height: 1px;
+  margin: 22px 0 20px;
+  border: 0;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.45), rgba(255, 255, 255, 0));
+}
+.lp-hero p { margin: 0 0 32px; max-width: 640px; font-size: 19px; font-weight: 500; line-height: 1.4; text-wrap: balance; text-shadow: 0 1px 16px rgba(30, 80, 160, 0.2); }
+
+/* the film plays in a macOS-style desktop floating over the sky's lower edge: see desktop.css */
+
+@media (max-width: 1200px) {
+  .lp-nav { padding-left: 24px; padding-right: 24px; }
+}
+@media (max-width: 760px) {
+  .lp-sky { height: 860px; background-size: 100% 100%, auto 1040px; background-position: 0 0, 19% 0; } /* skyline under the subline, CN Tower at the left */
+  .lp-nav { height: 56px; gap: 20px; padding: 8px 16px; }
+  .lp-nav-links { display: none; }
+  .lp-hero { padding: 52px 16px 64px; }
+  .lp-hero h1 { font-size: 46px; line-height: 1; }
+  .lp-hero hr { margin: 18px 0 16px; }
+  .lp-hero p { font-size: 16px; margin-bottom: 26px; }
+}

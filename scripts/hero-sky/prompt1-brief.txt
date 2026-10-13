@@ -1,0 +1,10 @@
+Generate an image: a new landscape painting, 3:2, the widest and largest size you can, in EXACTLY the style, palette and brightness of the attached image (hand-painted anime-style sky like a Makoto Shinkai background: saturated bright azure/cobalt blue at the top fading lighter toward the horizon, a big soft white sun low on the right with bloom and a thin horizontal light streak, a warm pale golden/peach glow along the horizon around the sun, crisp flat painterly shapes).
+
+Replace the mountains with the Toronto skyline seen from across Lake Ontario, painted exactly the way the mountains are painted: soft flat painterly blues, bright sun-lit white highlights on the right-hand faces of the towers (facing the sun), atmospheric haze, distant buildings paler and bluer. The CN Tower must be clearly recognizable, standing left of centre (about 28% across); the downtown cluster of glass skyscrapers around and to the right of it; the Rogers Centre dome at the foot of the CN Tower.
+
+Composition (this is a website hero background, a white headline and button go in the centre of the sky):
+- The top 55% is open, clean, bright blue sky. Nothing behind the centre. At most a few soft wispy clouds near the top corners.
+- The skyline sits across the lower-middle, its base at about 62% of the height; only the thin CN Tower reaches higher.
+- The sun is low on the right (about 78% across), just above the skyline, glowing.
+- Below the skyline, the lake continues to the bottom edge in the same blues with soft sun glints, and dissolves into soft white mist along the bottom.
+- No text, no logos, no people, no boats, no harsh photoreal detail. Bright and airy like the reference, never dark or grey.
