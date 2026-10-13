@@ -14,6 +14,11 @@ there. The original team project (v1) is `~/repos/projects/shift`; its public de
 - Footage: with the dev server up, write `{"shot": "<name>"}` to `/tmp/gp_rec.json` and run
   `BU_CDP_URL=http://127.0.0.1:9333 BU_NAME=gp-rec browser-harness < scripts/record.py`, then `bash scripts/encode.sh`
 
+## Hosting
+
+- github.com/EvanJYHe/gods-plan-v2 is the source of truth. It is connected to the Vercel project `gods-plan-v2`, so
+  every push to `main` deploys to production and other branches get preview URLs.
+
 ## Gotchas
 
 - `window.__gp` is the engine in dev and prod (for checks): `__gp.disasters.trigger('nuke', new __gp.rig.focus.constructor(x, 0, z))`,
