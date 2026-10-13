@@ -28,6 +28,20 @@
     image-set(url('/media/hero-sky-1x.jpg') 1x, url('/media/hero-sky.jpg') 2x) center min(0px, 375px - 25.96vw) / cover no-repeat;
   pointer-events: none;
 }
+/* mutes the painting (sky, sun, city, lake), fading out where the lake turns to mist so the white below stays clean */
+.lp-sky::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  -webkit-backdrop-filter: saturate(0.82) brightness(0.91);
+  backdrop-filter: saturate(0.82) brightness(0.91);
+  background:
+    radial-gradient(520px 340px at 75% 330px, rgba(255, 206, 160, 0.16), transparent 70%), /* the sun as a warm haze, not white glare */
+    linear-gradient(180deg, rgba(20, 40, 90, 0.1), rgba(20, 40, 90, 0.05) 520px);
+  -webkit-mask-image: linear-gradient(#000 0, #000 540px, transparent 760px);
+  mask-image: linear-gradient(#000 0, #000 540px, transparent 760px);
+}
 
 /* nav: 54px, transparent, white */
 .lp-nav {
