@@ -1,0 +1,162 @@
+/* The globe, Cluely-calm: the landing's painted sky, the Earth centred and large, white type on blue, and the city
+   labels as small white pills. No backdrop blur over the moving globe (it costs a full-screen pass every frame). */
+.play {
+  position: fixed;
+  inset: 0;
+  background: #5b9fe0;
+  --gp-ink: #0b1b33;
+  --gp-blue: #1c38ea;
+}
+
+.globe-layer {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  color: #fff;
+  transition: opacity 1.4s ease, visibility 0s linear 1.4s;
+  user-select: none;
+}
+.play.is-city .globe-layer { opacity: 0; visibility: hidden; pointer-events: none; }
+.play.is-diving :is(.gp-top, .gp-title, .gp-pins) { opacity: 0; transition: opacity 0.45s ease; pointer-events: none; }
+
+/* the landing's sky without the city: Cluely's blues, a soft glow behind the globe, haze at the bottom */
+.gp-sky {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(42% 46% at 50% 55%, rgba(255, 255, 255, 0.34), rgba(255, 255, 255, 0) 100%),
+    radial-gradient(30% 30% at 0% 0%, rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0) 100%),
+    radial-gradient(34% 34% at 100% 0%, rgba(255, 255, 255, 0.26), rgba(255, 255, 255, 0) 100%),
+    radial-gradient(120% 40% at 50% 108%, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0) 100%),
+    linear-gradient(180deg, #4f92d7 0%, #5ea6de 22%, #8cc4ea 58%, #c3e1f4 86%, #e6f2fa 100%);
+}
+
+.globe-stage { position: absolute; inset: 0; }
+.globe-stage canvas { display: block; cursor: grab; touch-action: none; }
+.globe-stage canvas:active { cursor: grabbing; }
+
+/* labels on the globe, positioned by globe.ts (transform/opacity only) */
+.gp-pins { position: absolute; inset: 0; pointer-events: none; transition: opacity 0.45s; }
+.gp-pin { position: absolute; left: 0; top: 0; will-change: transform, opacity; }
+.gp-pin { --gp-line: #fff; --gp-lead: 24px; --gp-shade: rgba(8, 28, 70, 0.4); }
+/* spy-style callout: a leader line from the pin, a rule under the name, coordinates below; drawn out on arrival */
+.gp-pin-lead { position: absolute; left: 0; bottom: 0; width: var(--gp-lead); height: var(--gp-lead); overflow: visible; }
+.gp-pin-lead path {
+  fill: none;
+  stroke: var(--gp-line);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  filter: drop-shadow(0 0 3px var(--gp-shade));
+  animation: gp-draw 0.35s ease-out forwards;
+}
+.gp-pin-tag {
+  position: absolute;
+  left: var(--gp-lead);
+  bottom: var(--gp-lead);
+  display: block;
+  padding: 0 10px 3px 2px;
+  border: 0;
+  background: none;
+  color: var(--gp-line);
+  font: inherit;
+  text-align: left;
+  text-shadow: 0 1px 8px var(--gp-shade);
+  white-space: nowrap;
+  pointer-events: auto;
+  cursor: pointer;
+  transition: padding 0.25s ease-out;
+}
+.gp-pin-tag::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: currentColor;
+  box-shadow: 0 0 6px var(--gp-shade);
+  transform: scaleX(0);
+  transform-origin: left;
+  animation: gp-extend 0.4s 0.3s ease-out forwards;
+}
+.gp-pin-name, .gp-pin-meta { display: block; opacity: 0; animation: gp-fade 0.3s 0.55s forwards; }
+.gp-pin-name { font-size: 12px; font-weight: 500; line-height: 18px; letter-spacing: 0.14em; text-transform: uppercase; }
+.gp-pin-meta {
+  position: absolute;
+  left: 2px;
+  top: calc(100% + 5px);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  font-variant-numeric: tabular-nums;
+  white-space: pre;
+  opacity: 0;
+  animation-delay: 0.65s;
+}
+.gp-pin.is-locked :is(.gp-pin-lead, .gp-pin-tag) { opacity: 0.72; transition: opacity 0.2s, padding 0.25s ease-out; }
+.gp-pin.is-hover :is(.gp-pin-lead, .gp-pin-tag) { opacity: 1; }
+.gp-pin.is-hover .gp-pin-tag, .gp-pin-tag:hover { padding-right: 22px; }
+.gp-pin.is-live { z-index: 2; }
+.gp-pin.is-live .gp-pin-name { font-size: 14px; font-weight: 600; line-height: 20px; }
+/* hanging the other ways */
+.gp-pin:is([data-side='nw'], [data-side='sw']) .gp-pin-lead { left: auto; right: 0; transform: scaleX(-1); }
+.gp-pin:is([data-side='nw'], [data-side='sw']) .gp-pin-tag { left: auto; right: var(--gp-lead); padding: 0 2px 3px 10px; text-align: right; }
+.gp-pin:is([data-side='nw'], [data-side='sw']) .gp-pin-tag::after { transform-origin: right; }
+.gp-pin:is([data-side='nw'], [data-side='sw']) .gp-pin-meta { left: auto; right: 2px; }
+.gp-pin:is([data-side='nw'], [data-side='sw']).is-hover .gp-pin-tag { padding-left: 22px; padding-right: 2px; }
+.gp-pin:is([data-side='se'], [data-side='sw']) .gp-pin-lead { bottom: auto; top: 0; transform: scaleY(-1); }
+.gp-pin[data-side='sw'] .gp-pin-lead { transform: scale(-1, -1); }
+.gp-pin:is([data-side='se'], [data-side='sw']) .gp-pin-tag { bottom: auto; top: var(--gp-lead); padding-top: 3px; padding-bottom: 0; }
+.gp-pin:is([data-side='se'], [data-side='sw']) .gp-pin-tag::after { top: 0; bottom: auto; }
+@keyframes gp-draw { to { stroke-dashoffset: 0; } }
+@keyframes gp-extend { to { transform: scaleX(1); } }
+@keyframes gp-fade { to { opacity: 1; } }
+
+/* one line of tease for a locked city, plain text above the callout */
+.gp-pin-tease {
+  position: absolute;
+  left: calc(var(--gp-lead) + 2px);
+  bottom: calc(var(--gp-lead) + 26px);
+  color: var(--gp-line);
+  font-size: 12px;
+  white-space: nowrap;
+  text-shadow: 0 1px 8px var(--gp-shade);
+  opacity: 0;
+  transform: translateY(3px);
+  transition: opacity 0.18s, transform 0.18s;
+}
+.gp-pin:is([data-side='nw'], [data-side='sw']) .gp-pin-tease { left: auto; right: calc(var(--gp-lead) + 2px); }
+.gp-pin:is([data-side='se'], [data-side='sw']) .gp-pin-tease { bottom: auto; top: calc(var(--gp-lead) + 44px); }
+.gp-pin.is-hover .gp-pin-tease { opacity: 1; transform: none; }
+
+/* wordmark and title */
+.gp-top { position: absolute; top: 0; left: 0; right: 0; height: 64px; display: flex; align-items: center; padding: 0 max(24px, calc((100vw - 1152px) / 2)); transition: opacity 0.45s; }
+.gp-brand { display: flex; color: #fff; transition: opacity 0.15s; }
+.gp-brand:hover { opacity: 0.8; }
+.gp-title {
+  position: absolute;
+  top: 64px;
+  left: 0;
+  right: 0;
+  margin: 0;
+  text-align: center;
+  font-family: 'EB Garamond Variable', 'EB Garamond', Georgia, serif;
+  font-size: 56px;
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: -0.8px;
+  text-shadow: 0 2px 24px rgba(30, 80, 160, 0.2);
+  pointer-events: none;
+  transition: opacity 0.45s;
+}
+
+/* a brief haze as the dive breaks through the clouds into the city */
+.dive-veil { position: absolute; inset: 0; pointer-events: none; background: radial-gradient(circle at 50% 50%, rgba(236, 246, 255, 0.95), rgba(206, 228, 246, 0.98)); opacity: 0; }
+.play.is-city .dive-veil { animation: veil 2.4s ease forwards; }
+@keyframes veil { 0% { opacity: 0.9; } 100% { opacity: 0; } }
+
+@media (max-width: 760px) {
+  .gp-top { height: 56px; padding: 0 16px; }
+  .gp-title { top: 84px; font-size: 44px; }
+}
